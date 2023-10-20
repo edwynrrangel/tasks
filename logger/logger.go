@@ -40,3 +40,7 @@ func Warn(args ...interface{}) {
 func Fatal(args ...interface{}) {
 	logger.Sugar().Fatal(args...)
 }
+
+func Sync() {
+	logger.Sync()
+}
