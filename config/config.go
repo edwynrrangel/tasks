@@ -1,10 +1,10 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 
+	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 
@@ -15,7 +15,7 @@ type (
 	Configuration struct {
 		Port               string
 		CorsAllowedOrigins string
-		PostgreSQLClient   *sql.DB
+		PostgreSQLClient   *sqlx.DB
 	}
 )
 
@@ -50,8 +50,8 @@ func loadEnv() {
 	}
 }
 
-func getPostgresqlConfig() (*sql.DB, error) {
-	client, err := sql.Open(
+func getPostgresqlConfig() (*sqlx.DB, error) {
+	client, err := sqlx.Connect(
 		"postgres",
 		fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 			os.Getenv("DB_HOST"),
