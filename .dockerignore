@@ -1,0 +1,16 @@
+/bin/
+/docs/
+/mocks/
+.devcontainer/
+.git/
+.dockerignore
+.vscode/
+.env
+.env.template
+.gitignore
+clean_architecture.png
+docker-compose.yml
+Dockerfile
+init.sql
+main
+README.md

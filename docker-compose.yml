@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-tasks
+    hostname: postgres
+    mem_limit: 256M
+    environment: 
+      - POSTGRES_USER=user_task
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=challenge_tasks
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data-tasks:/var/lib/postgresql/data
+      - /var/log/postgres/:/var/log/postgres
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  tasks:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: edwynrangel/tasks:1.0.0
+    container_name: tasks
+    hostname: tasks
+    mem_limit: 256M
+    environment: 
+      - PORT=3000
+      - CORS_ALLOWED_ORIGINS=*
+      - JWT_SECRET=*
+      - JWT_EXPIRE_TIME_IN_MIN=15
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=user_task
+      - DB_PASSWORD=123
+      - DB_NAME=challenge_tasks
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data-tasks:
+    driver: local
