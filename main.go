@@ -8,8 +8,11 @@ import (
 	loggerFiber "github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 
+	"github.com/edwynrrangel/tasks/auth"
 	"github.com/edwynrrangel/tasks/config"
 	"github.com/edwynrrangel/tasks/logger"
+	"github.com/edwynrrangel/tasks/tasks"
+	"github.com/edwynrrangel/tasks/users"
 )
 
 func init() {
@@ -25,6 +28,17 @@ func main() {
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: config.Config.CorsAllowedOrigins,
 	}))
+
+	auth.ApplyRoutes(app, config.Config)
+	users.ApplyRoutes(app, config.Config)
+	tasks.ApplyRoutes(app, config.Config)
+	app.Use(
+		func(c *fiber.Ctx) error {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"message": "lo sentimos, no se encontró el recurso solicitado",
+			})
+		},
+	)
 
 	logger.Info("Starting application")
 	logger.Fatal(
