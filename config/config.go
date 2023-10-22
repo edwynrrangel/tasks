@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
@@ -16,6 +17,8 @@ type (
 		Port               string
 		CorsAllowedOrigins string
 		PostgreSQLClient   *sqlx.DB
+		JWTExpireTimeInMin uint
+		JWTSecret          string
 	}
 )
 
@@ -37,10 +40,17 @@ func LoadConfig() *Configuration {
 		logger.Fatal(err)
 	}
 
+	jwtExpireTimeInMin, err := strconv.ParseUint(os.Getenv("JWT_EXPIRE_TIME_IN_MIN"), 10, 32)
+	if err != nil {
+		jwtExpireTimeInMin = 15
+	}
+
 	return &Configuration{
 		Port:               port,
 		CorsAllowedOrigins: corsAllowedOrigins,
 		PostgreSQLClient:   clientDB,
+		JWTExpireTimeInMin: uint(jwtExpireTimeInMin),
+		JWTSecret:          os.Getenv("JWT_SECRET"),
 	}
 }
 
