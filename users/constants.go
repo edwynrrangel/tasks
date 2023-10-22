@@ -44,6 +44,11 @@ const (
 	VALUES ($1, $2, $3)
 	RETURNING id, created_at, updated_at
 	`
+	sqlCountUsers = `
+	SELECT COUNT(*) FROM usr.users u
+	INNER JOIN usr.roles r ON r.id = u.role_id
+	WHERE 1 = 1 %s
+	`
 )
 
 var (

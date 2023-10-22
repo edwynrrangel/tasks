@@ -90,8 +90,25 @@ func (r *repository) List(queryParams ListRequest) (users []UserSQL, total uint,
 		getRole(queryParams).
 		getCreatedAt(queryParams)
 
-	query := fmt.Sprintf(sqlGetUser, fl.filters)
+	query := fmt.Sprintf(sqlCountUsers, fl.filters)
+	if err = r.clientDB.Get(&total, query, fl.args...); err != nil {
+		logger.Error(
+			"error getting total users",
+			"func", "List - r.clientDB.Get",
+			"error", err.Error(),
+		)
+		return nil, total, err
+	}
 
+	if total == 0 {
+		return
+	}
+
+	fl.getOrderBy(queryParams).
+		getLimit(queryParams).
+		getOffset(queryParams)
+
+	query = fmt.Sprintf(sqlGetUser, fl.filters)
 	if err = r.clientDB.Select(&users, query, fl.args...); err != nil {
 		logger.Error(
 			"error getting users",
