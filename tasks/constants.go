@@ -39,6 +39,15 @@ const (
 			ON t.status = s.id
 		WHERE 1 = 1 %s
 	`
+
+	sqlCountTasks = `
+	SELECT COUNT(*) FROM task.tasks t
+	INNER JOIN usr.users u
+		ON t.assigned_user = u.id
+	INNER JOIN task.states s
+		ON t.status = s.id
+	WHERE 1 = 1 %s
+	`
 )
 
 var (

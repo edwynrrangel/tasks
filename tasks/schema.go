@@ -126,3 +126,28 @@ func (fl *filterList) getDueDate(queryParams ListRequest) *filterList {
 
 	return fl
 }
+
+func (fl *filterList) getOrderBy(queryParams ListRequest) *filterList {
+	switch {
+	case queryParams.OrderBy != "":
+		fl.filters += fmt.Sprintf(" ORDER BY %s", queryParams.OrderBy)
+	default:
+		fl.filters += " ORDER BY u.created_at DESC"
+	}
+
+	return fl
+}
+
+func (fl *filterList) getLimit(queryParams ListRequest) *filterList {
+	fl.args = append(fl.args, queryParams.Limit)
+	fl.filters += fmt.Sprintf(" LIMIT $%d", len(fl.args))
+
+	return fl
+}
+
+func (fl *filterList) getOffset(queryParams ListRequest) *filterList {
+	fl.args = append(fl.args, (queryParams.Page-1)*queryParams.Limit)
+	fl.filters += fmt.Sprintf(" OFFSET $%d", len(fl.args))
+
+	return fl
+}

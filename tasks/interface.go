@@ -18,7 +18,7 @@ type Repository interface {
 
 type Service interface {
 	Create(task *CreateRequest) (*TaskResponse, *errors.Error)
-	List(queryParems ListRequest) (*ListResponse, *errors.Error)
+	List(queryParams ListRequest) (*ListResponse, *errors.Error)
 	Update(id string, task *UpdateRequest) (*TaskResponse, *errors.Error)
 	UpdateStatus(id string, body *UpdateRequest) (*TaskResponse, *errors.Error)
 	Delete(id string) *errors.Error

@@ -34,15 +34,32 @@ func (r *repository) Create(task *TaskSQL) error {
 	return nil
 }
 
-func (r *repository) List(queryParems ListRequest) (tasks []TaskSQL, total uint, err error) {
+func (r *repository) List(queryParams ListRequest) (tasks []TaskSQL, total uint, err error) {
 	fl := new(filterList)
-	fl.getDueDate(queryParems).
-		getStatus(queryParems).
-		getTitle(queryParems).
-		getAssignedUser(queryParems)
+	fl.getDueDate(queryParams).
+		getStatus(queryParams).
+		getTitle(queryParams).
+		getAssignedUser(queryParams)
 
-	query := fmt.Sprintf(sqlGetTask, fl.filters)
+	query := fmt.Sprintf(sqlCountTasks, fl.filters)
+	if err = r.clientDB.Get(&total, query, fl.args...); err != nil {
+		logger.Error(
+			"error getting total tasks",
+			"func", "List - r.clientDB.Get",
+			"error", err.Error(),
+		)
+		return nil, total, err
+	}
 
+	if total == 0 {
+		return
+	}
+
+	fl.getOrderBy(queryParams).
+		getLimit(queryParams).
+		getOffset(queryParams)
+
+	query = fmt.Sprintf(sqlGetTask, fl.filters)
 	if err = r.clientDB.Select(&tasks, query, fl.args...); err != nil {
 		logger.Error(
 			"error getting tasks",
