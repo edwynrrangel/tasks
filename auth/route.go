@@ -23,10 +23,10 @@ func bootstrap(config *config.Configuration) (Controller, session.Middleware) {
 }
 
 func ApplyRoutes(app *fiber.App, config *config.Configuration) {
-	ctrl, middleware := bootstrap(config)
+	ctrl, session := bootstrap(config)
 
 	group := app.Group("/auth")
 	group.Post("/login", ctrl.Login)
-	group.Post("/change-password", middleware.ValidateFirstLogin, ctrl.ChangePassword)
-	group.Post("/logout", middleware.ValidateFirstLogin, ctrl.Logout)
+	group.Post("/change-password", session.ValidateFirstLogin, ctrl.ChangePassword)
+	group.Post("/logout", session.ValidateFirstLogin, ctrl.Logout)
 }

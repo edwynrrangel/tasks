@@ -22,7 +22,7 @@ func NewSession(tokenService token.Service) Middleware {
 	}
 }
 
-func (s *session) ValidateSession(ctx *fiber.Ctx) error {
+func (s *session) Validate(ctx *fiber.Ctx) error {
 
 	// Get JWT from Authorization header
 	jwt, err := getJWTFromHeader(ctx)
