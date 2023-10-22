@@ -268,3 +268,6 @@ docker-compose up -d
 
 ### Caso de Uso 7: Cierre de Sesión de Usuario
 ![Caso de Uso 7](diagrams/diagrama%20de%20secuencias%207.svg)
+
+# Base de datos
+[Modelo Relacional](https://dbdiagram.io/d/app-tasks-6531d265ffbf5169f01160f3)
