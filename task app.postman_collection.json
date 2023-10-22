@@ -1,0 +1,444 @@
+{
+	"info": {
+		"_postman_id": "24e4464b-46a2-4bc8-9a45-0377f39f3742",
+		"name": "task app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3351998"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"",
+									"if (jsonData.access_token) {",
+									"    pm.collectionVariables.set(\"access_token\", jsonData.access_token);",
+									"}",
+									"if (jsonData.details) {",
+									"    pm.collectionVariables.set(\"access_token\", jsonData.details.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_app}}/auth/login",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host_app}}/auth/logout",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = JSON.parse(responseBody);",
+									"",
+									"if (jsonData.access_token) {",
+									"    pm.collectionVariables.set(\"access_token\", jsonData.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"admin\",\n    \"new_password\": \"123456789\",\n    \"confirm_new_password\": \"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_app}}/auth/change-password",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"auth",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"edwyn2\",\n    \"role\": \"Auditor\",\n    \"password_length\": 16\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_app}}/users",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host_app}}/users?page=1&limit=10",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "pagina a mostrar"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "limite de registro a retornar"
+								},
+								{
+									"key": "role",
+									"value": "Executor",
+									"description": "Role del usuario",
+									"disabled": true
+								},
+								{
+									"key": "created_at_min",
+									"value": "2023-10-21",
+									"description": "Fecha de creación mínimo",
+									"disabled": true
+								},
+								{
+									"key": "created_at_max",
+									"value": "2023-10-22",
+									"description": "Fecha de creación máxima",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tasks",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"titulo\",\n    \"description\": \"description\",\n    \"due_date\": \"2023-10-20\",\n    \"status\": \"Asignado\",\n    \"assigned_user\": \"c15bf305-2333-4f37-afb6-75375c49f2d8\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_app}}/tasks",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host_app}}/tasks?page=1&limit=10",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "pagina a mostrar"
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "limite de registro a retornar"
+								},
+								{
+									"key": "username",
+									"value": "edwyn",
+									"description": "nombre del usuario",
+									"disabled": true
+								},
+								{
+									"key": "due_date_min",
+									"value": "2023-10-22",
+									"description": "Fecha de expiración mínimo",
+									"disabled": true
+								},
+								{
+									"key": "due_date_max",
+									"value": "2023-10-22",
+									"description": "Fecha de expiración máxima",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"titulo update\",\n    \"description\": \"description update\",\n    \"due_date\": \"2023-10-21\",\n    \"assigned_user\": \"2087fdad-4d79-4175-915e-2c0a30b44141\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_app}}/tasks/c19046dd-3b35-4143-ad6e-702da020f98d",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"tasks",
+								"c19046dd-3b35-4143-ad6e-702da020f98d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host_app}}/tasks/2b0d9342-6852-469c-92c5-bca5c3698695",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"tasks",
+								"2b0d9342-6852-469c-92c5-bca5c3698695"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"Iniciado\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_app}}/tasks/68073e60-b3bc-4980-a9bc-111221c03c1a",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"tasks",
+								"68073e60-b3bc-4980-a9bc-111221c03c1a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host_app}}/tasks/c19046dd-3b35-4143-ad6e-702da020f98d",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"tasks",
+								"c19046dd-3b35-4143-ad6e-702da020f98d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"comment\": \"esto es una prueba\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host_app}}/tasks/2b0d9342-6852-469c-92c5-bca5c3698695/comments",
+							"host": [
+								"{{host_app}}"
+							],
+							"path": [
+								"tasks",
+								"2b0d9342-6852-469c-92c5-bca5c3698695",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": ""
+		}
+	]
+}
