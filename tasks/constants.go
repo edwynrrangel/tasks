@@ -11,6 +11,7 @@ const (
 	errMsgStatusNotAllow    string = "el nuevo estado no es permitido"
 	errMsgDueDateExpired    string = "la tarea ya expiró"
 	errMsgDueDateNotExpired string = "la tarea no ha expirado"
+	errMsgNotAuthorized     string = "no tiene permiso para realizar esta acción"
 )
 const (
 	sqlInsert = `

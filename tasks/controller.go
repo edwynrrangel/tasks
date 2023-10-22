@@ -3,11 +3,12 @@ package tasks
 import (
 	"net/http"
 
+	"github.com/gofiber/fiber/v2"
+
 	"github.com/edwynrrangel/tasks/errors"
 	"github.com/edwynrrangel/tasks/logger"
 	"github.com/edwynrrangel/tasks/middlewares/session"
 	"github.com/edwynrrangel/tasks/validator"
-	"github.com/gofiber/fiber/v2"
 )
 
 type controller struct {
@@ -52,7 +53,7 @@ func (c *controller) List(ctx *fiber.Ctx) error {
 			ToFiber(ctx)
 	}
 
-	response, err := c.service.List(*query)
+	response, err := c.service.List(ctx.Locals("user").(*session.Auth), *query)
 	if err != nil {
 		return err.ToFiber(ctx)
 	}
@@ -121,7 +122,7 @@ func (c *controller) AddComment(ctx *fiber.Ctx) error {
 }
 
 func (c *controller) GetByID(ctx *fiber.Ctx) error {
-	response, err := c.service.GetByID(ctx.Params("id"))
+	response, err := c.service.GetByID(ctx.Locals("user").(*session.Auth), ctx.Params("id"))
 	if err != nil {
 		return err.ToFiber(ctx)
 	}

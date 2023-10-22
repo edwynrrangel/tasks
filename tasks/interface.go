@@ -18,12 +18,12 @@ type Repository interface {
 
 type Service interface {
 	Create(task *CreateRequest) (*TaskResponse, *errors.Error)
-	List(queryParams ListRequest) (*ListResponse, *errors.Error)
+	List(user *session.Auth, queryParams ListRequest) (*ListResponse, *errors.Error)
 	Update(id string, task *UpdateRequest) (*TaskResponse, *errors.Error)
 	UpdateStatus(id string, body *UpdateRequest) (*TaskResponse, *errors.Error)
 	Delete(id string) *errors.Error
 	AddComment(user *session.Auth, id string, body *CommentRequest) (*comments.CommentResponse, *errors.Error)
-	GetByID(id string) (*TaskResponse, *errors.Error)
+	GetByID(user *session.Auth, id string) (*TaskResponse, *errors.Error)
 }
 
 type Controller interface {

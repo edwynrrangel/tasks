@@ -74,7 +74,11 @@ func (s *service) Create(task *CreateRequest) (*TaskResponse, *errors.Error) {
 	return taskResponse, nil
 }
 
-func (s *service) List(queryParems ListRequest) (*ListResponse, *errors.Error) {
+func (s *service) List(user *session.Auth, queryParems ListRequest) (*ListResponse, *errors.Error) {
+	if user.Role == "Executor" {
+		queryParems.Username = user.Username
+	}
+
 	list, total, err := s.taskRepo.List(queryParems)
 	if err != nil {
 		logger.Error(
@@ -261,7 +265,7 @@ func (s *service) AddComment(user *session.Auth, id string, body *CommentRequest
 	return commentSQL.ToResponse(), nil
 }
 
-func (s *service) GetByID(id string) (*TaskResponse, *errors.Error) {
+func (s *service) GetByID(user *session.Auth, id string) (*TaskResponse, *errors.Error) {
 	taskSQL, err := s.taskRepo.GetByID(id)
 	if err != nil {
 		logger.Error(
@@ -270,6 +274,10 @@ func (s *service) GetByID(id string) (*TaskResponse, *errors.Error) {
 			"error", err.Error(),
 		)
 		return nil, handlerError(err, nil)
+	}
+
+	if user.Role == "Executor" && taskSQL.AssignedUser.ID != user.ID {
+		return nil, errors.New(http.StatusForbidden, errMsgNotAuthorized, nil)
 	}
 
 	taskResponse := taskSQL.ToResponse()
